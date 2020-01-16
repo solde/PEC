@@ -2,13 +2,10 @@ const byte interrupt_pin = 2;
 const byte trigger_pin = 7;
 int intensity = 0;//value (0-1024) 0->OFF 1024->Max intensity
 
-int dimming = 0;
+int dimming = 100; // valor de la intensidad de la luz
 
 int state = 0;
 
-int readDimming(){
-  return 100;
-}
 
 void dimmingISR(){
   noInterrupts();
@@ -17,11 +14,11 @@ void dimmingISR(){
   interrupts();
 }
 
-ISR(TIMER1_COMPA_vect){//timer1 interrupt 1Hz toggles pin 13 (LED)
+ISR(TIMER1_COMPA_vect){
   noInterrupts();
   digitalWrite(trigger_pin, HIGH);
   TIMSK1 &= (0 << OCIE1A);
-  //delay(10);
+  delay(10);
   digitalWrite(trigger_pin, LOW);
 }
 
@@ -48,8 +45,6 @@ void setup() {
 }
 
 void loop() {
-  // dimming = readDimming();
-
 }
 
 /* TIMER 1 for interrupt frequency 100 Hz:
