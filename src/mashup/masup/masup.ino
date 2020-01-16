@@ -222,6 +222,7 @@ void readLDR(){
   // Calculamos el voltaje en la resistencia desconocida
   Voltaje_R2=(Vin_LDR/analog_Resolution)*lectura;
   // Lo imprimimos en el Monitor Serie
+  Serial.print("the current luminosity level is: ");
   Serial.println(Voltaje_R2);
 }
 
@@ -235,25 +236,33 @@ void MotorLoop(){
 void readMotor(){
   PWM_out_level = command.substring(6).toInt();
       if(PWM_out_level <= 70){
-         Serial.println("Apagando");
+         Serial.println("Turnin motor off");
         return;
       }
       analogWrite( PWM_out_pin, 220);
       delay(251);
       analogWrite( PWM_out_pin, PWM_out_level);
+      Serial.print("Changing motor speed to: ");
       Serial.println(PWM_out_level);
 }
 
 //---PIR---
 
 void readPir(){
-  Serial.println("istheresomeone?");
-  Serial.println(digitalRead(pir_pin));
+
+  if((digitalRead(pir_pin))) Serial.println("Movement detected");
+  else Serial.println("No movement detected");
 }
 
 //---Control---
 void displayHelp(){
-  Serial.println("Feature not implemented yet :)");
+  Serial.println("The currently available commands are:");
+  Serial.println("AirQ: Display if the air quality is above the treshold");
+  Serial.println("TH: Display the current temperature and humidity levels");
+  Serial.println("LDR: Display the current luminosity level");
+  Serial.println("Motor val: Change the current motor speed (val<70 turns the motor off, val must be under 255");
+  Serial.println("Pir: Display if the PIR senso detects movement");
+  Serial.println("help: Display this message");
   }
 
 void readCommand(){
